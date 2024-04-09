@@ -39,12 +39,21 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="default.vert">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="default.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="light.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="light.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
@@ -64,6 +73,9 @@
     <ClInclude Include="Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Paint.jpg">
@@ -76,6 +88,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Water.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="planks.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="planksSpec.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

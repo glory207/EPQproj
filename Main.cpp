@@ -4,6 +4,7 @@
 #include<GLFW/glfw3.h>
 #include<glm/vec3.hpp>
 #include<glm/mat4x4.hpp>
+#include<stb/stb_image.h>
 using namespace glm;
 using namespace std;
 #include<list>
@@ -11,6 +12,7 @@ using namespace std;
 #include "VBO.h"
 #include "EBO.h"
 #include "VAO.h"
+#include "Texture.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
@@ -25,19 +27,16 @@ int main()
     
     GLfloat vertices[] =
     {
-        -0.5f,-0.5f,0.0f,   1.0f, 0.5f, 0.2f, 
-        0.0f,-0.5f,0.0f,   0.6f, 0.8f, 0.3f,
-        0.5f,-0.5f,0.0f,   1.0f, 0.5f, 0.2f, 
-        0.25f,0.0f,0.0f,   0.6f, 0.8f, 0.3f,
-        0.0f,0.5f,0.0f,   1.0f, 0.5f, 0.2f, 
-        -0.25f,0.0f,0.0f,   0.6f, 0.8f, 0.3f, 
+       0.5f,0.5f,0.0f,    1.0f,1.0f ,        1.0f, 0.5f, 0.2f,
+       -0.5f,0.5f,0.0f,   0.0f,1.0f,       0.6f, 0.8f, 0.3f,
+       -0.5f,-0.5f,0.0f,  0.0f,0.0f,       1.0f, 0.5f, 0.2f,
+       0.5f,-0.5f,0.0f,   1.0f,0.0f,        0.6f, 0.8f, 0.3f,
 
     };
 
     GLuint indices[] = {
-        0,1,5,
-        1,2,3,
-        5,3,4,
+        0,1,2,
+        2,3,0,
 
     };
 
@@ -60,8 +59,9 @@ int main()
     VAO1.Bind();
     VBO VBO1(vertices, sizeof(vertices));
     EBO EBO1(indices, sizeof(indices));
-    VAO1.LinkAttrib(VBO1, 0,3,GL_FLOAT,6 * sizeof(float),(void*)0);
-    VAO1.LinkAttrib(VBO1, 1,3,GL_FLOAT,6 * sizeof(float),(void*)(3 * sizeof(float)));
+    VAO1.LinkAttrib(VBO1, 0,3,GL_FLOAT,8 * sizeof(float),(void*)0);
+    VAO1.LinkAttrib(VBO1, 1,2,GL_FLOAT,8 * sizeof(float),(void*)(3 * sizeof(float)));
+    VAO1.LinkAttrib(VBO1, 2,3,GL_FLOAT,8 * sizeof(float),(void*)(5 * sizeof(float)));
 
     VAO1.Unbind();
     VBO1.Unbind();
@@ -70,12 +70,16 @@ int main()
     glDepthFunc(GL_LESS);
 
     GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
+    
+    Texture Wall("Wall.jpg",GL_TEXTURE_2D,GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE);
+    Wall.texUnit(shaderProgram, "tex0", 0);
 
     while (!glfwWindowShouldClose(window))
     {
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         shaderProgram.Activate();
+        Wall.Bind();
         glUniform1f(uniID,pow(sin((float)glfwGetTime()),2));
         VAO1.Bind();
         glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT,0);
@@ -86,7 +90,9 @@ int main()
     VAO1.Delete();
     VBO1.Delete();
     EBO1.Delete();
+    Wall.Delete();
     shaderProgram.Delete();
+
     glfwDestroyWindow(window);
     glfwTerminate();
 

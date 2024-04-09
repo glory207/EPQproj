@@ -33,6 +33,12 @@
     <ClCompile Include="VAO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="stb.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="default.vert">
@@ -55,5 +61,22 @@
     <ClInclude Include="VAO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Paint.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Stone.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Wall.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Water.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

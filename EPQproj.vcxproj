@@ -181,6 +181,9 @@
     <Image Include="Wall.jpg" />
     <Image Include="Water.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Cube.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

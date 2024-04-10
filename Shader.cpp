@@ -22,7 +22,7 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile)
 
 	string vertexCode = get_file_contents(vertexFile);
 	string fragmentCode = get_file_contents(fragmentFile);
-
+	
 	const char* vertexShaderSource = vertexCode.c_str();
 	const char* fragmentShaderSource = fragmentCode.c_str();
 

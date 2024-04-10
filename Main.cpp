@@ -83,18 +83,18 @@ int main()
     vector<Vertex> verts(vertices, vertices + sizeof(vertices)/ sizeof(Vertex));
     vector<GLuint> ind(indices, indices + sizeof(indices) / sizeof(GLuint));
     vector<Texture> tex(textures, textures + sizeof(textures) / sizeof(Texture));
-    Mesh floor(verts, ind, tex);
-
+    //Mesh floor(verts, ind, tex, "floor");
+    Mesh floor("Cube.txt",tex);
     Shader lightShader("light.vert", "light.frag");
 
     vector<Vertex> lightVerts(lightVertices, lightVertices + sizeof(lightVertices) / sizeof(Vertex));
     vector<GLuint> lightInd(lightIndices, lightIndices + sizeof(lightIndices) / sizeof(GLuint));
    // vector<Texture> lightTex(textures, textures + sizeof(textures) / sizeof(Texture));
-    Mesh light(lightVerts, lightInd, tex);
+    Mesh light(lightVerts, lightInd, tex, "light");
    
 
     vec4 lightColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    vec3 lightPos = vec3(0.5f, 0.5f, 0.5f);
+    vec3 lightPos = vec3(0.8f, 0.8f, 0.8f);
     mat4 lightModel = mat4(1.0f);
     lightModel = translate(lightModel, lightPos);
 
@@ -147,7 +147,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     SCR_WIDTH = width;
     SCR_HEIGHT = height;
-    glViewport(0, 0, width, height);
+    glViewport((width- height) * 0.5, 0, height, height);
 }
 
 

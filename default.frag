@@ -11,7 +11,7 @@
     uniform sampler2D specular0;
     void main()
     {
-    float ambient = 1.0f;
+    float ambient = 0.2f;
         vec3 normal = normalize(norm);
         vec3 lightDir = normalize(lightPos - crntPos);
 
@@ -27,7 +27,4 @@
     FragColor = texture(diffuse0, TPos) * lightColor * (diffuse + ambient +  ((texture(specular0, TPos).r * 4) * specular ) );
 
 
-      // FragColor = texture(diffuse0, TPos)  * lightColor * (( texture(specular0, TPos).r * specular));
-      //FragColor = vec4(color, 1.0f);
-     // FragColor = texture(tex0, TPos);
     }

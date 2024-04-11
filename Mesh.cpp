@@ -365,3 +365,5 @@ Mesh::Mesh(string path , vector<Texture>& textures)
     VBO.Unbind();
     EBO.Unbind();
 }
+
+Mesh::Mesh(){}

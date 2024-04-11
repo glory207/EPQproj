@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include"Mesh.h"
+#include"MeshContainer.h"
 using namespace glm;
 using namespace std;
 
@@ -9,47 +10,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 int SCR_WIDTH = 800;
 int SCR_HEIGHT = 600;
 
-Vertex vertices[] =
-{ //     COORDINATES     /        COLORS        /    TexCoord    /       NORMALS     //
- Vertex{glm::vec3(-1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)},
-Vertex{glm::vec3(-1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
-Vertex{glm::vec3(1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
-Vertex{glm::vec3(1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}
-};
-
-// Indices for vertices order
-GLuint indices[] =
-{
-    0, 1, 2,
-    0, 2, 3
-};
-Vertex lightVertices[] =
-{ //     COORDINATES     //
-  Vertex{glm::vec3(-0.1f, -0.1f,  0.1f)},
-Vertex{glm::vec3(-0.1f, -0.1f, -0.1f)},
-Vertex{glm::vec3(0.1f, -0.1f, -0.1f)},
-Vertex{glm::vec3(0.1f, -0.1f,  0.1f)},
-Vertex{glm::vec3(-0.1f,  0.1f,  0.1f)},
-Vertex{glm::vec3(-0.1f,  0.1f, -0.1f)},
-Vertex{glm::vec3(0.1f,  0.1f, -0.1f)},
-Vertex{glm::vec3(0.1f,  0.1f,  0.1f)}
-};
-
-GLuint lightIndices[] =
-{
-    0, 1, 2,
-    0, 2, 3,
-    0, 4, 7,
-    0, 7, 3,
-    3, 7, 6,
-    3, 6, 2,
-    2, 6, 5,
-    2, 5, 1,
-    1, 5, 4,
-    1, 4, 0,
-    4, 5, 6,
-    4, 6, 7
-};
 int main()
 {
     glfwInit();
@@ -78,38 +38,22 @@ int main()
          Texture("planks.png","diffuse",0, GL_RGBA, GL_UNSIGNED_BYTE),
         Texture("planksSpec.png", "specular", 1, GL_RED, GL_UNSIGNED_BYTE)
     };
-
-    Shader shaderProgram("default.vert", "default.frag");
-    vector<Vertex> verts(vertices, vertices + sizeof(vertices)/ sizeof(Vertex));
-    vector<GLuint> ind(indices, indices + sizeof(indices) / sizeof(GLuint));
     vector<Texture> tex(textures, textures + sizeof(textures) / sizeof(Texture));
-    //Mesh floor(verts, ind, tex, "floor");
-    Mesh floor("Cube.txt",tex);
-    Shader lightShader("light.vert", "light.frag");
 
-    vector<Vertex> lightVerts(lightVertices, lightVertices + sizeof(lightVertices) / sizeof(Vertex));
-    vector<GLuint> lightInd(lightIndices, lightIndices + sizeof(lightIndices) / sizeof(GLuint));
-   // vector<Texture> lightTex(textures, textures + sizeof(textures) / sizeof(Texture));
-    Mesh light(lightVerts, lightInd, tex, "light");
-   
+
+    
+    vector <MeshContainer> meshes = {
+        MeshContainer(vec3(0), "Cube.txt"),
+        MeshContainer(vec3(1), "Cube.txt"),
+        MeshContainer(vec3(2), "Cube.txt"),
+        MeshContainer(vec3(3), "Cube.txt"),
+    
+    };
 
     vec4 lightColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    vec3 lightPos = vec3(0.8f, 0.8f, 0.8f);
+    vec3 lightPos = vec3(0.8f, 2.8f, 0.8f);
     mat4 lightModel = mat4(1.0f);
     lightModel = translate(lightModel, lightPos);
-
-    vec3 objectPos = vec3(0.0f, -0.1f, 0.0f);
-    mat4 objectModel = mat4(1.0f);
-    objectModel = translate(objectModel, objectPos);
-
-    lightShader.Activate();
-    glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, value_ptr(lightModel));
-    glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
-    shaderProgram.Activate();
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, value_ptr(objectModel));
-    glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
-    glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
-
 
 
 
@@ -118,23 +62,52 @@ int main()
     
     Camera camera(SCR_WIDTH, SCR_HEIGHT,vec3(0.0f,0.0f,2.0f));
    
+    double preTime = 0.0;
+    double curTime = 0.0;
+    double timeDif;
+    unsigned int counter = 0;
+
     while (!glfwWindowShouldClose(window))
     {
+
+       
+        lightPos = vec3(sin((float)glfwGetTime()), 2.8f, 0.8f);
+        lightModel = translate(mat4(1.0f), lightPos);
+        
+       
+
+        curTime = glfwGetTime();
+        timeDif = curTime - preTime;
+        counter++;
+        if (timeDif >= 1.0 / 30.0) {
+            string FPS = to_string((int)((1.0 / timeDif) * counter));
+            string ms = to_string((int)((timeDif/counter) * 1000));
+            string title = "EPQ:  " + FPS + "FPS  " + ms + "ms";
+            glfwSetWindowTitle(window, title.c_str());
+            preTime = curTime;
+            counter = 0;
+        }
+
+
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         camera.inputs(window);
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
-       
-        floor.Draw(shaderProgram,camera);
-        light.Draw(lightShader, camera);
+        for (MeshContainer mesh : meshes)
+        {
+            mesh.Update(lightColor, lightPos, camera);
+        }
+        
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    shaderProgram.Delete();
-    lightShader.Delete();
+    for (MeshContainer mesh : meshes)
+    {
+        mesh.destroy();
+    }
     glfwDestroyWindow(window);
     glfwTerminate();
 

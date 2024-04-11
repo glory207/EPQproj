@@ -20,7 +20,7 @@ public:
 	VAO VAO;
 	Mesh(vector<Vertex>& vertices, vector<GLuint>& indices, vector<Texture>& textures, string name);
 	Mesh(string path, vector<Texture>& textures);
-	
+	Mesh();
 	void Draw(Shader& shader, Camera& camera);
 };
 

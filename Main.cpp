@@ -1,12 +1,159 @@
 #include <iostream>
 #include <string>
 #include "Hierarchy.h"
-
+#include<thread>
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+string vts(vec3 v)
+{
+    return "x:" + to_string(v.x) + " y:" + to_string(v.y) + " z:" + to_string(v.z);
+};
+string vts(vec2 v)
+{
+    return "x:" + to_string(v.x) + " y:" + to_string(v.y);
+};
+vec3 setV3()
+{
+    vec3 x;
+    cout << "x = ";
+    cin >> x.x;
+    cout << "y = ";
+    cin >> x.y;
+    cout << "z = ";
+    cin >> x.z;
+    return x;
+};
+
+void setMesh(MeshContainer& mesh)
+{
+
+    cout << "1.pos " << vts(mesh.Position) << endl;
+    cout << "2.rot " << vts(mesh.objectRotation) << endl;
+    cout << "3.sca " << vts(mesh.objectScale) << endl;
+    int y;
+    cin >> y;
+
+    vec3 x = setV3();
+    switch (y)
+    {
+    case 1:
+        mesh.Position = x;
+        break;
+    case 2:
+        mesh.objectRotation = x;
+        break;
+    case 3:
+        mesh.objectScale = x;
+        break;
+    }
+    
+};
+void setMesh(LightContainer& mesh)
+{
+
+    cout << "1.pos " << vts(mesh.Position) << endl;
+    cout << "2.rot " << vts(mesh.objectRotation) << endl;
+    cout << "3.sca " << vts(mesh.objectScale) << endl;
+    cout << "4.col " << vts(vec3(mesh.lightColor)) << endl;
+    int y;
+    cin >> y;
+
+    vec3 x = setV3();
+    switch (y)
+    {
+    case 1:
+        mesh.Position = x;
+        break;
+    case 2:
+        mesh.objectRotation = x;
+        break;
+    case 3:
+        mesh.objectScale = x;
+        break;
+    case 4:
+        mesh.lightColor = vec4(x,1);
+        break;
+    }
+
+};
+void Dbg(Hierarchy& scene, bool close)
+{
+    while (close)
+    {
+       // system("CLS");
+        cout << "menue" << endl;
+        cout << "1.meshs" << endl;
+        cout << "2.lights" << endl;
+        int x;
+        string a;
+        cin >> x;
+        system("CLS");
+        if (x == 1)
+        {
+            cout << "e - edit" << endl;
+            cout << "a - add" << endl;
+            cout << "d - delet" << endl;
+            for (int i = 0; i < scene.meshes.size(); i++) {
+                cout << i << ".mesh" << endl;
+            }
+
+            cin >> a;
+            if (a == "e")
+            {
+                cout << "select ";
+                cin >> x;
+                setMesh(scene.meshes[x]);
+            }
+            else if(a == "a")
+            {
+                cout << "Cube.txt" << endl;
+                cout << "opy.txt" << endl;
+                cin >> a;
+                scene.AddMesh(a);
+            }
+            else if(a == "d")
+            {
+                cout << "select ";
+                cin >> x;
+                scene.DeleteMesh(x);
+            }
+
+            
+
+        }
+        else if (x == 2)
+        {
+            cout << "e - edit" << endl;
+            cout << "a - add" << endl;
+            cout << "d - delet" << endl;
+            for (int i = 0; i < scene.lights.size(); i++) {
+                cout << i << ".light" << endl;
+            }
+            cin >> a;
+            if (a == "e")
+            {
+                cout << "select ";
+                cin >> x;
+                setMesh(scene.lights[x]);
+            }
+            else if (a == "a")
+            {
+                scene.AddLight(setV3());
+            }
+            else if (a == "d")
+            {
+                cout << "select ";
+                cin >> x;
+                scene.DeleteLight(x);
+            }
+        }
+
+
+
+    }
+};
 
 int SCR_WIDTH = 800;
 int SCR_HEIGHT = 600;
-
 int main()
 {
     glfwInit();
@@ -31,16 +178,8 @@ int main()
     glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 
 
+    Hierarchy scene;
     
-    vector <MeshContainer> meshes = {
-        MeshContainer(vec3(0.0f,1.0f,0.0f), "Cube.txt"),
-        MeshContainer(vec3(2.0f,0.0f,0.0f), "Cube.txt"),
-        MeshContainer(vec3(4.0f,0.0f,0.0f), "Cube.txt"),
-    
-    };
-    LightContainer light(vec3(0.8f, 2.8f, 0.8f), vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
-
 
     glDepthFunc(GL_LESS);
     glEnable(GL_DEPTH_TEST);
@@ -51,7 +190,9 @@ int main()
     double curTime = 0.0;
     double timeDif;
     unsigned int counter = 0;
-
+    thread debuger(Dbg,ref(scene), !glfwWindowShouldClose(window));
+    
+    
     while (!glfwWindowShouldClose(window))
     {
 
@@ -75,21 +216,14 @@ int main()
         camera.inputs(window);
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
-        light.Update(camera);
-        for (MeshContainer mesh : meshes)
-        {
-            mesh.Update(light.lightColor, light.Position, camera);
-        }
+        scene.Update(camera);
         
-
+        
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-    light.destroy();
-    for (MeshContainer mesh : meshes)
-    {
-        mesh.destroy();
-    }
+    debuger.detach();
+    scene.destroy();
     glfwDestroyWindow(window);
     glfwTerminate();
 
@@ -97,12 +231,11 @@ int main()
     return 0;
 };
 
-
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     SCR_WIDTH = width;
     SCR_HEIGHT = height;
-    glViewport((width- height) * 0.5, 0, height, height);
+    glViewport(0, 0, width, height);
 }
 
 

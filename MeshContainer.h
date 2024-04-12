@@ -4,6 +4,7 @@
 #include <string>
 #include"Mesh.h"
 #include "ShaderClass.h"
+#include"LightContainer.h"
 class MeshContainer
 {
 public:
@@ -15,7 +16,8 @@ public:
 	Mesh mesh;
 	Shader shaderProgram;
 	MeshContainer(vec3 pos, string path);
-	void Update(vec4& lightColor, vec3& lightPos, Camera& camera);
+	MeshContainer();
+	void Update(vector<LightContainer>& lights, Camera& camera);
 	void destroy();
 
 };

@@ -150,6 +150,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="EBO.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="Hierarchy.cpp" />
     <ClCompile Include="LightContainer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -170,6 +171,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="EBO.h" />
+    <ClInclude Include="Hierarchy.h" />
     <ClInclude Include="LightContainer.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshContainer.h" />
@@ -188,6 +190,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Cube.txt" />
+    <Text Include="opy.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

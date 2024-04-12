@@ -51,6 +51,9 @@
     <ClCompile Include="LightContainer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Hierarchy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="default.vert">
@@ -97,6 +100,9 @@
     <ClInclude Include="LightContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Hierarchy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Paint.jpg">
@@ -120,6 +126,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Cube.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="opy.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

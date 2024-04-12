@@ -4,7 +4,7 @@
 
 MeshContainer::MeshContainer(vec3 pos, string path ) {
 	MeshContainer::Position = pos;
-	MeshContainer::objectScale = vec3(0.7f);
+	MeshContainer::objectScale = vec3(1.0f);
 	MeshContainer::objectRotation = vec3(0);
 
 	Texture textures[]{
@@ -17,14 +17,21 @@ MeshContainer::MeshContainer(vec3 pos, string path ) {
 	MeshContainer::mesh = Mesh(path, tex);
 
 }
+
+MeshContainer::MeshContainer() {
+	MeshContainer::Position = vec3(0);
+	MeshContainer::objectScale = vec3(1.0f);
+	MeshContainer::objectRotation = vec3(0);
+
+
+}
 void MeshContainer::destroy() {
 
 	shaderProgram.Delete();
 
 }
-void MeshContainer::Update(vec4& lightColor, vec3& lightPos, Camera& camera) {
+void MeshContainer::Update(vector<LightContainer>& lights, Camera& camera) {
 	objectModel = translate(mat4(1.0f), Position);
-	objectRotation.y = (float)glfwGetTime();
 	objectModel = rotate(objectModel, objectRotation.x, vec3(1.0f, 0.0f, 0.0f));
 	objectModel = rotate(objectModel, objectRotation.y, vec3(0.0f, 1.0f, 0.0f));
 	objectModel = rotate(objectModel, objectRotation.z, vec3(0.0f, 0.0f, 1.0f));
@@ -32,8 +39,15 @@ void MeshContainer::Update(vec4& lightColor, vec3& lightPos, Camera& camera) {
 	objectRotation.y += 90.0f;
 	shaderProgram.Activate();
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, value_ptr(objectModel));
-	glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
-	glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
+	glUniform1i(glGetUniformLocation(shaderProgram.ID, "lightnum"), lights.size());
+	for (int i = 0; i < lights.size(); i++)
+	{
+		string ii = "lightColor[" + to_string(i) + "]";
+		glUniform4f(glGetUniformLocation(shaderProgram.ID, ii.c_str()), lights[i].lightColor.x, lights[i].lightColor.y, lights[i].lightColor.z, lights[i].lightColor.w);
+		ii = "lightPos[" + to_string(i) + "]";
+		glUniform3f(glGetUniformLocation(shaderProgram.ID, ii.c_str()), lights[i].Position.x, lights[i].Position.y, lights[i].Position.z);
+
+	}
 	mesh.Draw(shaderProgram,camera);
 }
 

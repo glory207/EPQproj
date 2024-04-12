@@ -16,6 +16,7 @@ public:
 	Mesh mesh;
 	Shader shaderProgram;
 	LightContainer(vec3 pos,vec4 color);
+	LightContainer();
 	void Update(Camera& camera);
 	void destroy();
 

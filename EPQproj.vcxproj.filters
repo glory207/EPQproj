@@ -48,6 +48,9 @@
     <ClCompile Include="MeshContainer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LightContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="default.vert">
@@ -60,6 +63,9 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="light.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="default.geometry">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
@@ -86,6 +92,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MeshContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LightContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

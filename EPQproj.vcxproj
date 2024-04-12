@@ -150,6 +150,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="EBO.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="LightContainer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshContainer.cpp" />
@@ -161,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="default.frag" />
+    <None Include="default.geometry" />
     <None Include="default.vert" />
     <None Include="light.frag" />
     <None Include="light.vert" />
@@ -168,6 +170,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="EBO.h" />
+    <ClInclude Include="LightContainer.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshContainer.h" />
     <ClInclude Include="ShaderClass.h" />

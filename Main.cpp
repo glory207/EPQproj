@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
-#include"Mesh.h"
 #include"MeshContainer.h"
+#include"LightContainer.h"
 using namespace glm;
 using namespace std;
 
@@ -34,26 +34,14 @@ int main()
     glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 
 
-    Texture textures[]{
-         Texture("planks.png","diffuse",0, GL_RGBA, GL_UNSIGNED_BYTE),
-        Texture("planksSpec.png", "specular", 1, GL_RED, GL_UNSIGNED_BYTE)
-    };
-    vector<Texture> tex(textures, textures + sizeof(textures) / sizeof(Texture));
-
-
     
     vector <MeshContainer> meshes = {
-        MeshContainer(vec3(0), "Cube.txt"),
-        MeshContainer(vec3(1), "Cube.txt"),
-        MeshContainer(vec3(2), "Cube.txt"),
-        MeshContainer(vec3(3), "Cube.txt"),
+        MeshContainer(vec3(0.0f,1.0f,0.0f), "Cube.txt"),
+        MeshContainer(vec3(2.0f,0.0f,0.0f), "Cube.txt"),
+        MeshContainer(vec3(4.0f,0.0f,0.0f), "Cube.txt"),
     
     };
-
-    vec4 lightColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    vec3 lightPos = vec3(0.8f, 2.8f, 0.8f);
-    mat4 lightModel = mat4(1.0f);
-    lightModel = translate(lightModel, lightPos);
+    LightContainer light(vec3(0.8f, 2.8f, 0.8f), vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
 
 
@@ -70,11 +58,6 @@ int main()
     while (!glfwWindowShouldClose(window))
     {
 
-       
-        lightPos = vec3(sin((float)glfwGetTime()), 2.8f, 0.8f);
-        lightModel = translate(mat4(1.0f), lightPos);
-        
-       
 
         curTime = glfwGetTime();
         timeDif = curTime - preTime;
@@ -94,16 +77,18 @@ int main()
         
         camera.inputs(window);
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
+
+        light.Update(camera);
         for (MeshContainer mesh : meshes)
         {
-            mesh.Update(lightColor, lightPos, camera);
+            mesh.Update(light.lightColor, light.Position, camera);
         }
         
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-
+    light.destroy();
     for (MeshContainer mesh : meshes)
     {
         mesh.destroy();

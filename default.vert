@@ -3,20 +3,24 @@
     layout (location = 1) in vec3 aNorm;
     layout (location = 2) in vec3 aColor;
     layout (location = 3) in vec2 aTPos;
-    out vec3 color;
-    out vec3 norm;
-    out vec3 crntPos;
-    out vec2 TPos;
      uniform mat4 camMatrix;
      uniform mat4 model;
+     
+out DATA
+{
+    vec3 Normal;
+	vec3 color;
+	vec2 texCoord;
+    mat4 projection;
+} data_out;
 
 
-    void main()
-    {
-    norm = aNorm;
-       crntPos = vec3(model * vec4(aPos,1.0f));
-       gl_Position = camMatrix * vec4(crntPos, 1.0);
-       color = aColor;
-       TPos = aTPos;
-       
-    }
+void main()
+{
+    data_out.Normal = aNorm;
+   gl_Position = model * vec4(aPos,1.0f);
+   data_out.color = aColor;
+   data_out.texCoord = aTPos;
+   data_out.projection = camMatrix;
+   
+}

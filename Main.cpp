@@ -2,6 +2,12 @@
 #include <string>
 #include "Hierarchy.h"
 #include<thread>
+#include"imgui.h"
+#include"imgui_impl_opengl3.h"
+#include"imgui_impl_glfw.h"
+
+
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 string vts(vec3 v)
 {
@@ -192,7 +198,14 @@ int main()
     unsigned int counter = 0;
     thread debuger(Dbg,ref(scene), !glfwWindowShouldClose(window));
     
-    
+
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+
     while (!glfwWindowShouldClose(window))
     {
 
@@ -213,21 +226,108 @@ int main()
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        camera.inputs(window);
+
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+        if (!io.WantCaptureMouse)
+        {
+            camera.inputs(window);
+        }
+        
+        
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
         scene.Update(camera);
         
+        ImGui::Begin("add meshes");
+        ImGui::CheckboxFlags("io.ConfigFlags: DockingEnable", &io.ConfigFlags, ImGuiConfigFlags_DockingEnable);
+        if (ImGui::TreeNode("meshes")) {
+            if (ImGui::Button("add circle"))
+            {
+                scene.AddMesh("Cube.txt");
+            }
+            if (ImGui::Button("add opy"))
+            {
+                scene.AddMesh("opy.txt");
+            }
+            for (int i = 0; i < scene.meshes.size(); i++)
+            {
+                string pos;
+                pos = scene.meshes[i].mesh.name.c_str() + to_string(i);
+                if (ImGui::TreeNode(pos.c_str())) {
+                    pos = "pos ##" + to_string(i);
+                    if (ImGui::TreeNode(pos.c_str())) {
+                        ImGui::DragFloat("pos X", &scene.meshes[i].Position.x, 0.01f);
+                        ImGui::DragFloat("pos Y", &scene.meshes[i].Position.y, 0.01f);
+                        ImGui::DragFloat("pos Z", &scene.meshes[i].Position.z, 0.01f);
+                        ImGui::TreePop();
+                    }
+                    pos = "rot ##" + to_string(i);
+                    if (ImGui::TreeNode(pos.c_str())) {
+                        ImGui::DragFloat("rot X", &scene.meshes[i].objectRotation.x, 0.01f);
+                        ImGui::DragFloat("rot Y", &scene.meshes[i].objectRotation.y, 0.01f);
+                        ImGui::DragFloat("rot Z", &scene.meshes[i].objectRotation.z, 0.01f);
+                        ImGui::TreePop();
+                    }
+                    ImGui::TreePop();
+                }
+            }
+            ImGui::TreePop();
+        }
+
+        if (ImGui::TreeNode("light")) {
+            if (ImGui::Button("add light"))
+            {
+                scene.AddLight(vec3(1));
+            }
+            for (int i = 0; i < scene.lights.size(); i++)
+            {
+                string pos;
+                pos = "light" + to_string(i);
+                if (ImGui::TreeNode(pos.c_str())) {
+                    pos = "pos ##" + to_string(i);
+                    if (ImGui::TreeNode(pos.c_str())) {
+                        ImGui::DragFloat("pos X", &scene.lights[i].Position.x, 0.01f);
+                        ImGui::DragFloat("pos Y", &scene.lights[i].Position.y, 0.01f);
+                        ImGui::DragFloat("pos Z", &scene.lights[i].Position.z, 0.01f);
+                        ImGui::TreePop();
+                    }
+                    pos = "color ##" + to_string(i);
+                    if (ImGui::TreeNode(pos.c_str())) {
+                        ImGui::InputFloat("R", &scene.lights[i].lightColor.x);
+                        ImGui::InputFloat("G", &scene.lights[i].lightColor.y);
+                        ImGui::InputFloat("B", &scene.lights[i].lightColor.z);
+                        ImGui::TreePop();
+                    }
+                    ImGui::TreePop();
+                }
+            }
+            ImGui::TreePop();
+        }
+        ImGui::End();
+        ImGui::Begin("viewport"); 
+        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
+        ImGui::End();
+        ImGui::ShowDemoWindow();
+
         
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
     debuger.detach();
     scene.destroy();
     glfwDestroyWindow(window);
     glfwTerminate();
 
-
+    
     return 0;
 };
 

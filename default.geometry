@@ -4,13 +4,10 @@ layout (triangles) in;
 layout (triangle_strip, max_vertices = 3) out;
 
 out vec3 norm;
-out vec3 color;
 out vec2 TPos;
 out vec3 crntPos;
 in DATA
 {
-    vec3 Normal;
-	vec3 color;
 	vec2 texCoord;
     mat4 projection;
 } data_in[];
@@ -25,21 +22,18 @@ void main()
     norm = (surfaceNormal);
     gl_Position = data_in[0].projection * (gl_in[0].gl_Position);
     crntPos = vec3(gl_in[0].gl_Position);
-    color = data_in[0].color;
     TPos = data_in[0].texCoord;
     EmitVertex();
 
     norm = (surfaceNormal);
     gl_Position = data_in[1].projection * (gl_in[1].gl_Position);
     crntPos = vec3(gl_in[1].gl_Position);
-    color = data_in[1].color;
     TPos = data_in[1].texCoord;
     EmitVertex();
 
     norm = (surfaceNormal);
     gl_Position = data_in[2].projection * (gl_in[2].gl_Position);
     crntPos = vec3(gl_in[2].gl_Position);
-    color = data_in[2].color;
     TPos = data_in[2].texCoord;
     EmitVertex();
 

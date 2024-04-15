@@ -18,14 +18,14 @@ public:
 	vec3 Orientation = vec3(0.0f,0.0,-1.0f);
 	vec3 Up = vec3(0.0f,1.0,0.0f);
 	mat4 cameraMatrix = mat4(1.0f);
-	int width;
-	int height;
+	float width;
+	float height;
 	bool firstClick = true;
 	float speed = 0.1f;
 	float sensitivity = 100.0f;
 
-	Camera(int width, int height, vec3 position);
-	void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
+	Camera(float width, float height, vec3 position);
+	void updateMatrix(float FOVdeg, float nearPlane, float farPlane, float wi, float he);
 	void Matrix(Shader& shader,const char* uniform);
 	void inputs(GLFWwindow* window);
 

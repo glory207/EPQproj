@@ -1,16 +1,17 @@
 #include "Camera.h"
 
 
-Camera::Camera(int width, int height, vec3 position) {
+Camera::Camera(float width, float height, vec3 position) {
 	Camera::width = width;
 	Camera::height = height;
 	Position = position;
 }
 
-void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane) {
+void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane,float wi, float he ) {
 	mat4 view = mat4(1.0f);
 	mat4 projection = mat4(1.0f);
-
+	Camera::width = wi;
+	Camera::height = he;
 	view = lookAt(Position,Position + Orientation, Up);
 	projection = perspective(radians(FOVdeg), (float)(width / height), nearPlane, farPlane);
 	cameraMatrix = projection * view;

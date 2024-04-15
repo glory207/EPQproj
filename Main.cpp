@@ -196,7 +196,7 @@ int main()
     double curTime = 0.0;
     double timeDif;
     unsigned int counter = 0;
-    thread debuger(Dbg,ref(scene), !glfwWindowShouldClose(window));
+   // thread debuger(Dbg,ref(scene), !glfwWindowShouldClose(window));
     
 
     IMGUI_CHECKVERSION();
@@ -236,12 +236,12 @@ int main()
         }
         
         
-        camera.updateMatrix(45.0f, 0.1f, 100.0f);
+        camera.updateMatrix(45.0f, 0.1f, 100.0f, SCR_WIDTH, SCR_HEIGHT);
 
         scene.Update(camera);
         
         ImGui::Begin("add meshes");
-        ImGui::CheckboxFlags("io.ConfigFlags: DockingEnable", &io.ConfigFlags, ImGuiConfigFlags_DockingEnable);
+       // ImGui::CheckboxFlags("io.ConfigFlags: DockingEnable", &io.ConfigFlags, ImGuiConfigFlags_DockingEnable);
         if (ImGui::TreeNode("meshes")) {
             if (ImGui::Button("add circle"))
             {
@@ -256,6 +256,12 @@ int main()
                 string pos;
                 pos = scene.meshes[i].mesh.name.c_str() + to_string(i);
                 if (ImGui::TreeNode(pos.c_str())) {
+                    pos = "delete" + to_string(i);
+                    if (ImGui::Button(pos.c_str()))
+                    {
+                         
+                        scene.DeleteMesh(i);
+                    }
                     pos = "pos ##" + to_string(i);
                     if (ImGui::TreeNode(pos.c_str())) {
                         ImGui::DragFloat("pos X", &scene.meshes[i].Position.x, 0.01f);
@@ -284,8 +290,16 @@ int main()
             for (int i = 0; i < scene.lights.size(); i++)
             {
                 string pos;
+                
+                
                 pos = "light" + to_string(i);
                 if (ImGui::TreeNode(pos.c_str())) {
+                    pos = "delete" + to_string(i);
+                    if (ImGui::Button(pos.c_str()))
+                    {
+                         
+                        scene.DeleteLight(i);
+                    }
                     pos = "pos ##" + to_string(i);
                     if (ImGui::TreeNode(pos.c_str())) {
                         ImGui::DragFloat("pos X", &scene.lights[i].Position.x, 0.01f);
@@ -295,9 +309,9 @@ int main()
                     }
                     pos = "color ##" + to_string(i);
                     if (ImGui::TreeNode(pos.c_str())) {
-                        ImGui::InputFloat("R", &scene.lights[i].lightColor.x);
-                        ImGui::InputFloat("G", &scene.lights[i].lightColor.y);
-                        ImGui::InputFloat("B", &scene.lights[i].lightColor.z);
+                        ImGui::DragFloat("R", &scene.lights[i].lightColor.x, 0.001f,0, 1);
+                        ImGui::DragFloat("G", &scene.lights[i].lightColor.y, 0.001f,0, 1);
+                        ImGui::DragFloat("B", &scene.lights[i].lightColor.z, 0.001f,0, 1);
                         ImGui::TreePop();
                     }
                     ImGui::TreePop();
@@ -306,11 +320,11 @@ int main()
             ImGui::TreePop();
         }
         ImGui::End();
-        ImGui::Begin("viewport"); 
-        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
-        ImGui::End();
-        ImGui::ShowDemoWindow();
+       // ImGui::Begin("viewport"); 
+       // ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+       // ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
+       // ImGui::End();
+       // ImGui::ShowDemoWindow();
 
         
         ImGui::Render();
@@ -322,7 +336,7 @@ int main()
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
-    debuger.detach();
+   // debuger.detach();
     scene.destroy();
     glfwDestroyWindow(window);
     glfwTerminate();

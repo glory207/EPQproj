@@ -83,23 +83,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="default.vert">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="default.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="light.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="light.vert">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="default.geometry">
-      <Filter>Resource Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="ShaderClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -159,31 +142,51 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Paint.jpg">
+    <Text Include="Res\Cube.txt">
       <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Stone.jpg">
+    </Text>
+    <Text Include="Res\opy.txt">
       <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Wall.jpg">
+    </Text>
+    <Text Include="Res\SupCur.txt">
       <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Water.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="planks.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="planksSpec.png">
-      <Filter>Resource Files</Filter>
-    </Image>
+    </Text>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Cube.txt">
+    <None Include="Res\default.frag">
       <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="opy.txt">
+    </None>
+    <None Include="Res\default.geometry">
       <Filter>Resource Files</Filter>
-    </Text>
+    </None>
+    <None Include="Res\default.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Res\light.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Res\light.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Res\Paint.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Res\planks.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Res\planksSpec.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Res\Stone.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Res\Wall.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Res\Water.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

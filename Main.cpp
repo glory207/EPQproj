@@ -205,7 +205,7 @@ int main()
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
-
+    Shader sd;
     while (!glfwWindowShouldClose(window))
     {
 
@@ -245,11 +245,15 @@ int main()
         if (ImGui::TreeNode("meshes")) {
             if (ImGui::Button("add circle"))
             {
-                scene.AddMesh("Cube.txt");
+                scene.AddMesh("Res/Cube.txt");
+            }
+            if (ImGui::Button("add SupCur"))
+            {
+                scene.AddMesh("Res/SupCur.txt");
             }
             if (ImGui::Button("add opy"))
             {
-                scene.AddMesh("opy.txt");
+                scene.AddMesh("Res/opy.txt");
             }
             for (int i = 0; i < scene.meshes.size(); i++)
             {

@@ -3,7 +3,7 @@
 Hierarchy::Hierarchy() {
 
      meshes = {
-        MeshContainer(vec3(0.0f,0.0f,0.0f), "Cube.txt"),
+        MeshContainer(vec3(0.0f,0.0f,0.0f), "Res/Cube.txt"),
 
     };
      lights = { 

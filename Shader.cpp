@@ -18,11 +18,9 @@ std::string get_file_contents(const char* filename)
 }
 Shader::Shader()
 {
-
-	string vertexCode = get_file_contents("default.vert");
-	string fragmentCode = get_file_contents("default.frag");
-	string geometryCode = get_file_contents("default.geometry");
-
+	string vertexCode = get_file_contents("Res/default.vert");
+	string fragmentCode = get_file_contents("Res/default.frag");
+	string geometryCode = get_file_contents("Res/default.geometry");
 	const char* vertexShaderSource = vertexCode.c_str();
 	const char* fragmentShaderSource = fragmentCode.c_str();
 	const char* geometryShaderSource = geometryCode.c_str();

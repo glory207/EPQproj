@@ -8,8 +8,8 @@ MeshContainer::MeshContainer(vec3 pos, string path ) {
 	MeshContainer::objectRotation = vec3(0);
 
 	Texture textures[]{
-		 Texture("planks.png","diffuse",0,GL_RGBA,GL_UNSIGNED_BYTE),
-		 Texture("planksSpec.png","specular",1,GL_RED,GL_UNSIGNED_BYTE),
+		 Texture("Res/planks.png","diffuse",0,GL_RGBA,GL_UNSIGNED_BYTE),
+		 Texture("Res/planksSpec.png","specular",1,GL_RED,GL_UNSIGNED_BYTE),
 	};
 	//shaderProgram = Shader("default.vert", "default.frag");
 	vector<Texture> tex(textures, textures + sizeof(textures) / sizeof(Texture));

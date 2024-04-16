@@ -173,13 +173,6 @@
     <ClCompile Include="VBO.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="default.frag" />
-    <None Include="default.geometry" />
-    <None Include="default.vert" />
-    <None Include="light.frag" />
-    <None Include="light.vert" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="EBO.h" />
     <ClInclude Include="Hierarchy.h" />
@@ -201,16 +194,24 @@
     <ClInclude Include="VBO.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Paint.jpg" />
-    <Image Include="planks.png" />
-    <Image Include="planksSpec.png" />
-    <Image Include="Stone.jpg" />
-    <Image Include="Wall.jpg" />
-    <Image Include="Water.jpg" />
+    <Text Include="Res\Cube.txt" />
+    <Text Include="Res\opy.txt" />
+    <Text Include="Res\SupCur.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Cube.txt" />
-    <Text Include="opy.txt" />
+    <None Include="Res\default.frag" />
+    <None Include="Res\default.geometry" />
+    <None Include="Res\default.vert" />
+    <None Include="Res\light.frag" />
+    <None Include="Res\light.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Res\Paint.jpg" />
+    <Image Include="Res\planks.png" />
+    <Image Include="Res\planksSpec.png" />
+    <Image Include="Res\Stone.jpg" />
+    <Image Include="Res\Wall.jpg" />
+    <Image Include="Res\Water.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -7,13 +7,13 @@ LightContainer::LightContainer(vec3 pos,vec4 color) {
 	LightContainer::lightColor = color;
 	LightContainer::objectScale = vec3(0.5f);
 
-	shaderProgram = Shader("light.vert", "light.frag");
+	shaderProgram = Shader("Res/light.vert", "Res/light.frag");
 	Texture textures[]{
 		 Texture(),
 	};
 	vector<Texture> tex(textures, textures + sizeof(textures) / sizeof(Texture));
 
-	LightContainer::mesh = Mesh("Cube.txt", tex);
+	LightContainer::mesh = Mesh("Res/Cube.txt", tex);
 
 }
 LightContainer::LightContainer() {
@@ -21,13 +21,13 @@ LightContainer::LightContainer() {
 	LightContainer::lightColor = vec4(1);
 	LightContainer::objectScale = vec3(0.5f);
 
-	shaderProgram = Shader("light.vert", "light.frag");
+	shaderProgram = Shader("Res/light.vert", "Res/light.frag");
 	Texture textures[]{
 		 Texture(),
 	};
 	vector<Texture> tex(textures, textures + sizeof(textures) / sizeof(Texture));
 
-	LightContainer::mesh = Mesh("Cube.txt", tex);
+	LightContainer::mesh = Mesh("Res/Cube.txt", tex);
 
 }
 void LightContainer::destroy() {

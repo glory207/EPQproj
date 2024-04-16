@@ -2,6 +2,7 @@
 
 Texture::Texture(const char* image, const char* texType, GLuint slot, GLenum format, GLenum pixelType)
 {
+
 	type = texType;
 
 	int widthImg, heightImg, numColCh;
@@ -34,7 +35,7 @@ Texture::Texture()
 
 	int widthImg, heightImg, numColCh;
 	stbi_set_flip_vertically_on_load(true);
-	unsigned char* bytes = stbi_load("planks.png", &widthImg, &heightImg, &numColCh, 0);
+	unsigned char* bytes = stbi_load("Res/planks.png", &widthImg, &heightImg, &numColCh, 0);
 
 	glGenTextures(1, &ID);
 	glActiveTexture(GL_TEXTURE0 + 0);

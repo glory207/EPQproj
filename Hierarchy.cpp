@@ -1,7 +1,7 @@
 #include "Hierarchy.h"
 
 Hierarchy::Hierarchy() {
-
+   
      meshes = {
         MeshContainer(vec3(0.0f,0.0f,0.0f), "Res/Cube.txt"),
 

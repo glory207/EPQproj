@@ -7,6 +7,13 @@ VBO::VBO(vector<Vertex>& vertices)
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STREAM_DRAW);
 
 }
+VBO::VBO(vector<float>& vertices)
+{
+	glGenBuffers(1,&ID);
+	glBindBuffer(GL_ARRAY_BUFFER, ID);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STREAM_DRAW);
+
+}
 void VBO::Bind() {
 	glBindBuffer(GL_ARRAY_BUFFER, ID);
 }

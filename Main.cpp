@@ -160,11 +160,13 @@ void Dbg(Hierarchy& scene, bool close)
 
 int SCR_WIDTH = 800;
 int SCR_HEIGHT = 600;
+unsigned int samples = 8;
 int main()
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_SAMPLES, samples);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     
    
@@ -189,6 +191,7 @@ int main()
 
     glDepthFunc(GL_LESS);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_MULTISAMPLE);
     
     Camera camera(SCR_WIDTH, SCR_HEIGHT,vec3(0.0f,0.0f,2.0f));
    
@@ -196,8 +199,6 @@ int main()
     double curTime = 0.0;
     double timeDif;
     unsigned int counter = 0;
-   // thread debuger(Dbg,ref(scene), !glfwWindowShouldClose(window));
-    
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -206,6 +207,9 @@ int main()
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
     Shader sd;
+    int meshPointer = 0;
+    Shader gridshaderProgram = Shader("Res/grid.vert", "Res/grid.frag", "Res/grid.geomertry");
+    Mesh gridMesh = Mesh();
     while (!glfwWindowShouldClose(window))
     {
 
@@ -239,15 +243,20 @@ int main()
         camera.updateMatrix(45.0f, 0.1f, 100.0f, SCR_WIDTH, SCR_HEIGHT);
 
         scene.Update(camera);
-        
-        ImGui::Begin("add meshes");
-       // ImGui::CheckboxFlags("io.ConfigFlags: DockingEnable", &io.ConfigFlags, ImGuiConfigFlags_DockingEnable);
+        gridshaderProgram.Activate();
+        glUniformMatrix4fv(glGetUniformLocation(gridshaderProgram.ID, "model"), 1, GL_FALSE, value_ptr(mat4(1)));
+        glUniform4f(glGetUniformLocation(gridshaderProgram.ID, "lightColor"), 1, 1, 1, 1);
+        glUniform3f(glGetUniformLocation(gridshaderProgram.ID, "camUp"), camera.Orientation.x, camera.Orientation.y, camera.Orientation.z);
+
+        gridMesh.Draw(gridshaderProgram, camera);
+
+        ImGui::Begin("scene");
         if (ImGui::TreeNode("meshes")) {
             if (ImGui::Button("add circle"))
             {
                 scene.AddMesh("Res/Cube.txt");
             }
-            if (ImGui::Button("add SupCur"))
+            if (ImGui::SmallButton("add SupCur"))
             {
                 scene.AddMesh("Res/SupCur.txt");
             }
@@ -259,38 +268,41 @@ int main()
             {
                 string pos;
                 pos = scene.meshes[i].mesh.name.c_str() + to_string(i);
-                if (ImGui::TreeNode(pos.c_str())) {
-                    pos = "delete" + to_string(i);
-                    if (ImGui::Button(pos.c_str()))
-                    {
-                         
-                        scene.DeleteMesh(i);
-                    }
-                    pos = "pos ##" + to_string(i);
-                    if (ImGui::TreeNode(pos.c_str())) {
-                        ImGui::DragFloat("pos X", &scene.meshes[i].Position.x, 0.01f);
-                        ImGui::DragFloat("pos Y", &scene.meshes[i].Position.y, 0.01f);
-                        ImGui::DragFloat("pos Z", &scene.meshes[i].Position.z, 0.01f);
-                        ImGui::TreePop();
-                    }
-                    pos = "rot ##" + to_string(i);
-                    if (ImGui::TreeNode(pos.c_str())) {
-                        ImGui::DragFloat("rot X", &scene.meshes[i].objectRotation.x, 0.01f);
-                        ImGui::DragFloat("rot Y", &scene.meshes[i].objectRotation.y, 0.01f);
-                        ImGui::DragFloat("rot Z", &scene.meshes[i].objectRotation.z, 0.01f);
-                        ImGui::TreePop();
-                    }
-                    ImGui::TreePop();
+                if (ImGui::Button(pos.c_str()))
+                {
+                    meshPointer = i;
                 }
+              // if (ImGui::TreeNode(pos.c_str())) {
+              //     pos = "delete" + to_string(i);
+              //     if (ImGui::Button(pos.c_str()))
+              //     {
+              //          
+              //         scene.DeleteMesh(i);
+              //     }
+              //     pos = "pos ##" + to_string(i);
+              //     if (ImGui::TreeNode(pos.c_str())) {
+              //         ImGui::DragFloat("pos X", &scene.meshes[i].Position.x, 0.01f);
+              //         ImGui::DragFloat("pos Y", &scene.meshes[i].Position.y, 0.01f);
+              //         ImGui::DragFloat("pos Z", &scene.meshes[i].Position.z, 0.01f);
+              //         ImGui::TreePop();
+              //     }
+              //     pos = "rot ##" + to_string(i);
+              //     if (ImGui::TreeNode(pos.c_str())) {
+              //         ImGui::DragFloat("rot X", &scene.meshes[i].objectRotation.x, 0.01f);
+              //         ImGui::DragFloat("rot Y", &scene.meshes[i].objectRotation.y, 0.01f);
+              //         ImGui::DragFloat("rot Z", &scene.meshes[i].objectRotation.z, 0.01f);
+              //         ImGui::TreePop();
+              //     }
+              //     ImGui::TreePop();
+              // }
             }
             ImGui::TreePop();
         }
-
         if (ImGui::TreeNode("light")) {
-            if (ImGui::Button("add light"))
-            {
-                scene.AddLight(vec3(1));
-            }
+           if (ImGui::Button("add light"))
+           {
+               scene.AddLight(vec3(1));
+           }
             for (int i = 0; i < scene.lights.size(); i++)
             {
                 string pos;
@@ -311,6 +323,13 @@ int main()
                         ImGui::DragFloat("pos Z", &scene.lights[i].Position.z, 0.01f);
                         ImGui::TreePop();
                     }
+                    pos = "rot ##" + to_string(i);
+                    if (ImGui::TreeNode(pos.c_str())) {
+                        ImGui::DragFloat("rot X", &scene.lights[i].objectRotation.x, 0.01f);
+                        ImGui::DragFloat("rot Y", &scene.lights[i].objectRotation.y, 0.01f);
+                        ImGui::DragFloat("rot Z", &scene.lights[i].objectRotation.z, 0.01f);
+                        ImGui::TreePop();
+                    }
                     pos = "color ##" + to_string(i);
                     if (ImGui::TreeNode(pos.c_str())) {
                         ImGui::DragFloat("R", &scene.lights[i].lightColor.x, 0.001f,0, 1);
@@ -324,6 +343,42 @@ int main()
             ImGui::TreePop();
         }
         ImGui::End();
+
+        ImGui::Begin("info");
+        string pos;
+        pos = scene.meshes[meshPointer].mesh.name.c_str() + to_string(meshPointer);
+            if (ImGui::TreeNode(pos.c_str())) {
+                pos = "delete" + to_string(meshPointer);
+                if (ImGui::Button(pos.c_str()))
+                {
+                     
+                    scene.DeleteMesh(meshPointer);
+                }
+                pos = "pos ##" + to_string(meshPointer);
+                if (ImGui::TreeNode(pos.c_str())) {
+                    ImGui::DragFloat("pos X", &scene.meshes[meshPointer].Position.x, 0.01f);
+                    ImGui::DragFloat("pos Y", &scene.meshes[meshPointer].Position.y, 0.01f);
+                    ImGui::DragFloat("pos Z", &scene.meshes[meshPointer].Position.z, 0.01f);
+                    ImGui::TreePop();
+                }
+                pos = "rot ##" + to_string(meshPointer);
+                if (ImGui::TreeNode(pos.c_str())) {
+                    ImGui::DragFloat("rot X", &scene.meshes[meshPointer].objectRotation.x, 0.01f);
+                    ImGui::DragFloat("rot Y", &scene.meshes[meshPointer].objectRotation.y, 0.01f);
+                    ImGui::DragFloat("rot Z", &scene.meshes[meshPointer].objectRotation.z, 0.01f);
+                    ImGui::TreePop();
+                }
+                pos = "sca ##" + to_string(meshPointer);
+                if (ImGui::TreeNode(pos.c_str())) {
+                    ImGui::DragFloat("sca X", &scene.meshes[meshPointer].objectScale.x, 0.01f);
+                    ImGui::DragFloat("sca Y", &scene.meshes[meshPointer].objectScale.y, 0.01f);
+                    ImGui::DragFloat("sca Z", &scene.meshes[meshPointer].objectScale.z, 0.01f);
+
+                    ImGui::TreePop();
+                }
+                ImGui::TreePop();
+            }
+          ImGui::End();
        // ImGui::Begin("viewport"); 
        // ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
        // ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
@@ -341,6 +396,7 @@ int main()
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
    // debuger.detach();
+    gridshaderProgram.Delete();
     scene.destroy();
     glfwDestroyWindow(window);
     glfwTerminate();

@@ -312,4 +312,18 @@ Mesh::Mesh(string path , vector<Texture>& textures)
     EBO.Unbind();
 }
 
-Mesh::Mesh(){}
+Mesh::Mesh(){
+    Mesh::name = "Empty";
+    Mesh::vertices = { Vertex{vec3(0),vec3(0)} ,Vertex{vec3(0),vec3(0)} ,Vertex{vec3(0),vec3(0)} };
+    Mesh::indices = {0,1,2};
+
+    VAO.Bind();
+    VBO VBO(vertices);
+    EBO EBO(indices);
+    VAO.LinkAttrib(VBO, 0, 3, GL_FLOAT, sizeof(Vertex), (void*)0);
+    VAO.LinkAttrib(VBO, 1, 2, GL_FLOAT, sizeof(Vertex), (void*)(3 * sizeof(float)));
+
+    VAO.Unbind();
+    VBO.Unbind();
+    EBO.Unbind();
+}

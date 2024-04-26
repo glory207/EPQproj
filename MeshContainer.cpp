@@ -3,9 +3,9 @@
 
 
 MeshContainer::MeshContainer(vec3 pos, string path ) {
-	MeshContainer::Position = pos;
-	MeshContainer::objectScale = vec3(1.0f);
-	MeshContainer::objectRotation = vec3(0);
+	Position = pos;
+	objectScale = vec3(1.0f);
+	objectRotation = vec3(0);
 
 	Texture textures[]{
 		 Texture("Res/planks.png","diffuse",0,GL_RGBA,GL_UNSIGNED_BYTE),
@@ -17,7 +17,6 @@ MeshContainer::MeshContainer(vec3 pos, string path ) {
 	MeshContainer::mesh = Mesh(path, tex);
 
 }
-
 MeshContainer::MeshContainer() {
 	MeshContainer::Position = vec3(0);
 	MeshContainer::objectScale = vec3(1.0f);
@@ -46,6 +45,9 @@ void MeshContainer::Update(vector<LightContainer>& lights, Camera& camera) {
 		glUniform4f(glGetUniformLocation(shaderProgram.ID, ii.c_str()), lights[i].lightColor.x, lights[i].lightColor.y, lights[i].lightColor.z, lights[i].lightColor.w);
 		ii = "lightPos[" + to_string(i) + "]";
 		glUniform3f(glGetUniformLocation(shaderProgram.ID, ii.c_str()), lights[i].Position.x, lights[i].Position.y, lights[i].Position.z);
+
+		ii = "lightRot[" + to_string(i) + "]";
+		glUniform3f(glGetUniformLocation(shaderProgram.ID, ii.c_str()), lights[i].objectRotation.x, lights[i].objectRotation.y, lights[i].objectRotation.z);
 
 	}
 	mesh.Draw(shaderProgram,camera);

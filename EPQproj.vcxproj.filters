@@ -81,6 +81,9 @@
     <ClCompile Include="imgui\imgui_impl_glfw.cpp">
       <Filter>Source Files\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="HirObj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderClass.h">
@@ -140,6 +143,9 @@
     <ClInclude Include="imgui\imgui_impl_opengl3_loader.h">
       <Filter>Header Files\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="HirObj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Res\Cube.txt">
@@ -166,6 +172,18 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Res\light.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Res\light.geomertry">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Res\grid.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Res\grid.geomertry">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Res\grid.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
